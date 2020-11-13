@@ -4,7 +4,7 @@ from collections import Counter
 
 
 def entropy(a_list):
-    # you code here
+    '''Calculates the Shannon's entropy'''
     c = Counter(a_list)
     entropy = 0
     for cnt in c.values():
@@ -15,7 +15,7 @@ def entropy(a_list):
 
 # information gain calculation
 def information_gain(root, left, right):
-    ''' root - initial data, left and right - two partitions of initial data'''
+    '''root - initial data, left and right - two partitions'''
     S0 = entropy(root)
     S_left = entropy(left)
     S_right = entropy(right)
@@ -24,10 +24,12 @@ def information_gain(root, left, right):
 
 
 def find_split(X, y, feature):
+    '''Finds the split by simply averaging average feature values for each class'''
     return np.mean((X[feature][y==1].mean(),X[feature][y==0].mean()))
 
 
 def split_tree(X, y, feature):
+    '''Splits whole tree by split threshold'''
     split = find_split(X, y, feature)
     X_left = X[X[feature] <= split]
     y_left = y[X[feature] <= split]
@@ -53,6 +55,7 @@ def best_feature_to_split(X, y):
 
 
 def build_tree(X, y):
+    '''Builds a decision tree for a dataframe X with labels y'''
     best = best_feature_to_split(X, y)
     split = find_split(X, y, best)
     print('{} >= {:.1f}\n'.format(best, split))
@@ -86,11 +89,12 @@ def build_tree(X, y):
         print('Splitting right leaf..')
         build_tree(X_right, y_right)
     else:
-        
         print('Right leaf is optimal')
         print('---' * 15)
         print('\n')
-    
+# Toy data
 X = pd.read_csv('data.csv', index_col=0)
 y = pd.read_csv('labels.csv', index_col=0, squeeze=True)
+
+# Test of the function
 build_tree(X, y)
